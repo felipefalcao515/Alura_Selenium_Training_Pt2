@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 
 namespace Alura.LeilaoOnline.Selenium.PageObjects
@@ -30,6 +33,18 @@ namespace Alura.LeilaoOnline.Selenium.PageObjects
             byInputInicioPregao = By.Id("InicioPregao");
             byInputTerminoPregao = By.Id("TerminoPregao");
             byBotaoSalvar = By.CssSelector("button [type=submit]");
+        }
+
+        public IEnumerable<string> Categorias //Usa o pacote "Support" para validar as opções dentro de categoria.
+        {
+            get
+            {
+                var elementoCategoria = new SelectElement(driver.FindElement(byInputCategoria)); // Define uma classe validadora do campo Categoria.
+                //elementoCategoria.FindElements(By.TagName("option"));
+                return elementoCategoria.Options
+                    .Where(o => o.Enabled) // Define como validação apenas elementos html ativos.
+                    .Select(o => o.Text); // Define como selação dos elementos de texto.
+            }
         }
 
         public void Visitar()
